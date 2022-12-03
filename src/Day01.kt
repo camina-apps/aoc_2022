@@ -19,7 +19,7 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         val elves = getElvesList(input)
-        return  elves
+        return elves
             .map { caloriesPerElve(it) }
             .sortedDescending()
             .slice(0..2)

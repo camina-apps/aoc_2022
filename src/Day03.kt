@@ -19,6 +19,15 @@ fun main() {
         return duplicate.first()
     }
 
+    fun findDuplicateBetweenElves(elvesRucksacks: List<String>): Char {
+        val firstRucksack = elvesRucksacks.first().map { it.toChar() }
+        val secondRucksack = elvesRucksacks[1].map { it.toChar() }
+        val thirdRucksack = elvesRucksacks.last().map { it.toChar() }
+        val intersection = firstRucksack.intersect(secondRucksack)
+        val secondIntersection = thirdRucksack.intersect(intersection)
+        return secondIntersection.first()
+    }
+
     fun part1(input: List<String>): Int {
         return input.map {
             val item = findDuplicate(it)
@@ -27,14 +36,18 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return 1
+        val groups = input.chunked(3)
+        return groups.map {
+            val badge = findDuplicateBetweenElves(it)
+            priorityOfItem(badge)
+        }.sum()
     }
 
     val testInput = readInput("Day03_test")
     check(part1(testInput) == 157)
-//    check(part2(testInput) == 45000)
+    check(part2(testInput) == 70)
 
     val input = readInput("Day03")
     println(part1(input))
-//    println(part2(input))
+    println(part2(input))
 }

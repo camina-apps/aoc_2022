@@ -4,11 +4,8 @@ import kotlin.math.roundToInt
 fun main() {
 
     fun priorityOfItem(letter: Char): Int {
-        return if (letter.isUpperCase()) {
-            letter.code - 38
-        } else {
-            letter.code - 96
-        }
+        val offset = if (letter.isUpperCase()) 38 else 96
+        return letter.code - offset
     }
 
     fun findDuplicate(rucksack: String): Char {
@@ -29,18 +26,19 @@ fun main() {
     }
 
     fun part1(input: List<String>): Int {
-        return input.map {
+        return input.sumOf {
             val item = findDuplicate(it)
             priorityOfItem(item)
-        }.sum()
+        }
     }
 
     fun part2(input: List<String>): Int {
-        val groups = input.chunked(3)
-        return groups.map {
-            val badge = findDuplicateBetweenElves(it)
-            priorityOfItem(badge)
-        }.sum()
+        return input
+            .chunked(3)
+            .sumOf {
+                val badge = findDuplicateBetweenElves(it)
+                priorityOfItem(badge)
+            }
     }
 
     val testInput = readInput("Day03_test")

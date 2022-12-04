@@ -6,47 +6,33 @@ data class Section(
 
 fun main() {
 
-    fun parseIntoSections(input: String): Pair<Section, Section> {
+    // horizontal arranged based on starting point
+    fun parseIntoArrangedSections(input: String): Pair<Section, Section> {
         val elves = input.split(",")
         val rawSectionA = elves[0].split("-")
         val rawSectionB = elves[1].split("-")
         val sectionA = Section(rawSectionA[0].toInt(), rawSectionA[1].toInt())
         val sectionB = Section(rawSectionB[0].toInt(), rawSectionB[1].toInt())
-        return Pair(sectionA, sectionB)
+
+        return if (sectionA.start <= sectionB.start) {
+            Pair(sectionA, sectionB)
+        } else {
+            Pair(sectionB, sectionA)
+        }
     }
 
-    fun fullyContains(sectionA: Section, sectionB: Section): Boolean {
-        if (sectionA.start == sectionB.start || sectionA.end == sectionB.end) return true
-
-        var left: Section
-        var right: Section
-        if (sectionA.start <= sectionB.start) {
-            left = sectionA
-            right = sectionB
-        } else {
-            left = sectionB
-            right = sectionA
-        }
+    fun fullyContains(left: Section, right: Section): Boolean {
+        if (left.start == right.start || left.end == right.end) return true
         return left.end >= right.end
     }
 
-    fun isOverlapping(sectionA: Section, sectionB: Section): Boolean {
-        var left: Section
-        var right: Section
-        if (sectionA.start <= sectionB.start) {
-            left = sectionA
-            right = sectionB
-        } else {
-            left = sectionB
-            right = sectionA
-        }
-
+    fun isOverlapping(left: Section, right: Section): Boolean {
         return (right.start <= left.end && right.start >= left.start )
     }
 
     fun part1(input: List<String>): Int {
         return input.sumOf { line ->
-            val sections = parseIntoSections(line)
+            val sections = parseIntoArrangedSections(line)
             if (fullyContains(sections.first, sections.second)) {
                 1.0
             } else {
@@ -57,7 +43,7 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         return input.sumOf { line ->
-            val sections = parseIntoSections(line)
+            val sections = parseIntoArrangedSections(line)
             if (isOverlapping(sections.first, sections.second)) {
                 1.0
             } else {
